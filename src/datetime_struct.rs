@@ -1,16 +1,33 @@
 use super::functions::*;
 
 pub struct DateTime {
-    pub year: usize,
-    pub month: usize,
-    pub day: usize,
-    pub hour: usize,
-    pub minute: usize,
-    pub second: usize,
+    pub year: isize,
+    pub month: isize,
+    pub day: isize,
+    pub hour: isize,
+    pub minute: isize,
+    pub second: isize,
+}
+
+impl Default for DateTime {
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
 impl DateTime {
-    pub fn to_unix_time(&self) -> usize {
+    pub fn new() -> Self {
+        Self {
+            year: 1970,
+            month: 1,
+            day: 1,
+            hour: 0,
+            minute: 0,
+            second: 0,
+        }
+    }
+
+    pub fn to_unix_time(&self) -> isize {
         let mut seconds = self.second;
         seconds += minutes_to_seconds(self.minute);
         seconds += hours_to_seconds(self.hour);
@@ -21,42 +38,13 @@ impl DateTime {
         seconds
     }
 
-    pub fn add_seconds_stupid(&mut self, seconds: usize) {
-        for _ in 0..seconds {
-            self.second += 1;
-            if self.second < 60 {
-                continue;
-            }
-            self.second = 0;
-            self.minute += 1;
-            if self.minute < 60 {
-                continue;
-            }
-            self.minute = 0;
-            self.hour += 1;
-            if self.hour < 24 {
-                continue;
-            }
-            self.hour = 0;
-            self.day += 1;
-            let mut month_length = MONTH_LENGTHS[self.month];
-            if is_leap_year(self.year) && self.month == 2 {
-                month_length += 1;
-            }
-            if self.day <= month_length {
-                continue;
-            }
-            self.day = 1;
-            self.month += 1;
-            if self.month <= 12 {
-                continue;
-            }
-            self.month = 1;
-            self.year += 1;
-        }
+    pub fn from_unix_time(seconds: isize) -> DateTime {
+        let mut datetime = DateTime::new();
+        datetime.add_seconds(seconds);
+        datetime
     }
 
-    pub fn add_months(&mut self, months: usize) {
+    pub fn add_months(&mut self, months: isize) {
         let mut months_left = months;
         loop {
             if self.month + months_left <= 12 {
@@ -69,10 +57,10 @@ impl DateTime {
         }
     }
 
-    pub fn add_days(&mut self, days: usize) {
+    pub fn add_days(&mut self, days: isize) {
         let mut days_left = days;
         loop {
-            let mut month_length = MONTH_LENGTHS[self.month];
+            let mut month_length = MONTH_LENGTHS[self.month as usize];
             if is_leap_year(self.year) && self.month == 2 {
                 month_length += 1;
             }
@@ -86,7 +74,7 @@ impl DateTime {
         }
     }
 
-    pub fn add_hours(&mut self, hours: usize) {
+    pub fn add_hours(&mut self, hours: isize) {
         let mut hours_left = hours;
         loop {
             if self.hour + hours_left <= 23 {
@@ -99,7 +87,7 @@ impl DateTime {
         }
     }
 
-    pub fn add_minutes(&mut self, minutes: usize) {
+    pub fn add_minutes(&mut self, minutes: isize) {
         let mut minutes_left = minutes;
         loop {
             if self.minute + minutes_left <= 59 {
@@ -112,7 +100,7 @@ impl DateTime {
         }
     }
 
-    pub fn add_seconds(&mut self, seconds: usize) {
+    pub fn add_seconds(&mut self, seconds: isize) {
         let mut seconds_left = seconds;
         loop {
             if self.second + seconds_left <= 59 {
