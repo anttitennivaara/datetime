@@ -1,3 +1,5 @@
+use num::signum;
+
 use super::functions::*;
 
 pub struct DateTime {
@@ -44,72 +46,81 @@ impl DateTime {
         datetime
     }
 
+    pub fn to_string(&self) -> String {
+        let mut date_string = String::from("");
+        date_string.push_str(format_string(self.year).as_str());
+        date_string.push_str(".");
+        date_string.push_str(format_string(self.month).as_str());
+        date_string.push_str(".");
+        date_string.push_str(format_string(self.day).as_str());
+        date_string.push_str(" ");
+        date_string.push_str(format_string(self.hour).as_str());
+        date_string.push_str(":");
+        date_string.push_str(format_string(self.minute).as_str());
+        date_string.push_str(":");
+        date_string.push_str(format_string(self.second).as_str());
+        date_string
+    }
+
     pub fn add_months(&mut self, months: isize) {
-        let mut months_left = months;
-        loop {
-            if self.month + months_left <= 12 {
-                self.month += months_left;
-                break;
-            }
-            months_left -= 12 - self.month + 1;
-            self.month = 1;
-            self.year += 1;
+        self.month += months % 12;
+        self.year += months / 12;
+        if !is_between(1, 12, self.month) {
+            self.year += signum(self.month);
+            self.month -= 12 * signum(self.month);
         }
     }
 
     pub fn add_days(&mut self, days: isize) {
         let mut days_left = days;
         loop {
-            let mut month_length = MONTH_LENGTHS[self.month as usize];
-            if is_leap_year(self.year) && self.month == 2 {
-                month_length += 1;
+            if days_left == 0 {
+                break;
             }
-            if self.day + days_left <= month_length {
+            let month_length = get_month_length(self.month, self.year);
+            let sum = self.day + days_left;
+            if is_between(1, month_length, sum) {
                 self.day += days_left;
                 break;
             }
-            days_left -= month_length - self.day + 1;
-            self.day = 1;
-            self.add_months(1);
+            if sum > month_length {
+                days_left -= month_length - self.day + 1;
+                self.add_months(1);
+                self.day = 1;
+                continue;
+            }
+            if sum <= 0 {
+                days_left -= self.day;
+                self.add_months(-1);
+                self.day = get_month_length(self.month, self.year);
+            }
         }
     }
 
     pub fn add_hours(&mut self, hours: isize) {
-        let mut hours_left = hours;
-        loop {
-            if self.hour + hours_left <= 23 {
-                self.hour += hours_left;
-                break;
-            }
-            hours_left -= 24 - self.hour;
-            self.hour = 0;
-            self.add_days(1);
+        self.hour += hours % 24;
+        self.add_days(hours / 24);
+        if !is_between(0, 23, self.hour) {
+            self.add_days(signum(self.hour));
+            self.hour -= 24 * signum(self.hour);
         }
     }
 
     pub fn add_minutes(&mut self, minutes: isize) {
-        let mut minutes_left = minutes;
-        loop {
-            if self.minute + minutes_left <= 59 {
-                self.minute += minutes_left;
-                break;
-            }
-            minutes_left -= 60 - self.minute;
-            self.minute = 0;
-            self.add_hours(1);
+        self.minute += minutes % 24;
+        self.add_hours(minutes / 24);
+        if !is_between(0, 23, self.minute) {
+            self.add_hours(signum(self.minute));
+            self.minute -= 24 * signum(self.minute);
         }
     }
 
     pub fn add_seconds(&mut self, seconds: isize) {
-        let mut seconds_left = seconds;
-        loop {
-            if self.second + seconds_left <= 59 {
-                self.second += seconds_left;
-                break;
-            }
-            seconds_left -= 60 - self.second;
-            self.second = 0;
-            self.add_minutes(1);
+        self.second += seconds % 24;
+        self.add_minutes(seconds / 24);
+        if !is_between(0, 23, self.second) {
+            self.add_minutes(signum(self.second));
+            self.second -= 24 * signum(self.second);
         }
     }
 }

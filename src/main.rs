@@ -13,7 +13,7 @@ fn main() {
         second: 0,
     };
 
-    date.add_months(-12);
+    date.add_hours(24);
 
-    println!("{}.{}.{}", date.day, date.month, date.year);
+    println!("{}", date.to_string());
 }

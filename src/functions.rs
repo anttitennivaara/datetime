@@ -1,7 +1,13 @@
-pub const MONTH_LENGTHS: [isize; 13] = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+pub fn get_month_length(month: isize, year: isize) -> isize {
+    let mut lengths: [isize; 12] = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    if is_leap_year(year) {
+        lengths[1] += 1;
+    }
+    lengths[(month as usize) - 1]
+}
 
-pub fn is_between(min: isize, number: isize, max: isize) -> bool {
-    number > min && number < max
+pub fn is_between(min: isize, max: isize, number: isize) -> bool {
+    number >= min && number <= max
 }
 
 pub fn is_leap_year(year: isize) -> bool {
@@ -36,10 +42,7 @@ pub fn days_to_seconds(days: isize) -> isize {
 pub fn months_to_days(first_month: isize, last_month: isize, year: isize) -> isize {
     let mut days: isize = 0;
     for month in first_month..last_month {
-        days += &MONTH_LENGTHS[month as usize];
-    }
-    if is_leap_year(year) {
-        days += 1;
+        days += get_month_length(month, year);
     }
     days
 }
@@ -72,4 +75,13 @@ pub fn seconds_to_hours(seconds: isize) -> isize {
 }
 pub fn seconds_to_days(seconds: isize) -> isize {
     hours_to_days(seconds_to_hours(seconds))
+}
+
+pub fn format_string(number: isize) -> String {
+    if number < 10 {
+        let mut number_string = String::from("0");
+        number_string.insert_str(1, number.to_string().as_str());
+        return number_string;
+    }
+    number.to_string()
 }
