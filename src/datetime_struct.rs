@@ -62,11 +62,15 @@ impl DateTime {
         date_string
     }
 
+    pub fn add_years(&mut self, years: isize) {
+        self.year += years;
+    }
+
     pub fn add_months(&mut self, months: isize) {
         self.month += months % 12;
         self.year += months / 12;
         if !is_between(1, 12, self.month) {
-            self.year += signum(self.month);
+            self.add_years(signum(self.month));
             self.month -= 12 * signum(self.month);
         }
     }
