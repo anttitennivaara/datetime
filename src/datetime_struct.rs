@@ -46,6 +46,19 @@ impl DateTime {
         datetime
     }
 
+    pub fn time_since(&self, other: DateTime, unit: &str) -> isize {
+        let self_unix = self.to_unix_time();
+        let other_unix = other.to_unix_time();
+        let seconds = self_unix - other_unix;
+        match unit {
+            "seconds" => return seconds,
+            "minutes" => return seconds_to_minutes(seconds),
+            "hours" => return seconds_to_hours(seconds),
+            "days" => return seconds_to_days(seconds),
+            _ => panic!("Invalid time unit"),
+        }
+    }
+    
     pub fn to_string(&self) -> String {
         let mut date_string = String::from("");
         date_string.push_str(format_string(self.year).as_str());
