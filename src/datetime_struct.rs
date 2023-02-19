@@ -1,3 +1,4 @@
+use std::ops::Sub;
 use num::signum;
 
 use super::functions::*;
@@ -14,6 +15,28 @@ pub struct DateTime {
 impl Default for DateTime {
     fn default() -> Self {
         Self::new()
+    }
+}
+
+impl Sub for DateTime {
+    type Output = Self;
+
+    fn sub(self, other: Self) -> Self::Output {
+        let mut result = Self {
+            year: 0,
+            month: 0,
+            day: 0,
+            hour: 0,
+            minute: 0,
+            second: 0,
+        };
+        result.add_years(self.year - other.year);
+        result.add_months(self.month - other.month);
+        result.add_days(self.day - other.day);
+        result.add_hours(self.hour - other.hour);
+        result.add_minutes(self.minute - other.minute);
+        result.add_seconds(self.second - other.second);
+        result
     }
 }
 
@@ -49,12 +72,12 @@ impl DateTime {
     pub fn time_since(&self, other: DateTime, unit: &str) -> isize {
         let self_unix = self.to_unix_time();
         let other_unix = other.to_unix_time();
-        let seconds = self_unix - other_unix;
+        let unix_time_diff = self_unix - other_unix;
         match unit {
-            "seconds" => return seconds,
-            "minutes" => return seconds_to_minutes(seconds),
-            "hours" => return seconds_to_hours(seconds),
-            "days" => return seconds_to_days(seconds),
+            "seconds" => return unix_time_diff,
+            "minutes" => return seconds_to_minutes(unix_time_diff),
+            "hours" => return seconds_to_hours(unix_time_diff),
+            "days" => return seconds_to_days(unix_time_diff),
             _ => panic!("Invalid time unit"),
         }
     }
@@ -72,6 +95,23 @@ impl DateTime {
         date_string.push_str(format_string(self.minute).as_str());
         date_string.push_str(":");
         date_string.push_str(format_string(self.second).as_str());
+        date_string
+    }
+
+    pub fn to_units_string(&self) -> String {
+        let mut date_string = String::from("");
+        date_string.push_str("Years: ");
+        date_string.push_str(self.year.to_string().as_str());
+        date_string.push_str("\nMonths: ");
+        date_string.push_str(self.month.to_string().as_str());
+        date_string.push_str("\nDays: ");
+        date_string.push_str(self.day.to_string().as_str());
+        date_string.push_str("\nHours: ");
+        date_string.push_str(self.hour.to_string().as_str());
+        date_string.push_str("\nMinutes: ");
+        date_string.push_str(self.minute.to_string().as_str());
+        date_string.push_str("\nSeconds: ");
+        date_string.push_str(self.second.to_string().as_str());
         date_string
     }
 

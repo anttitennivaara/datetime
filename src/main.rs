@@ -4,7 +4,7 @@ pub mod functions;
 use crate::datetime_struct::DateTime;
 
 fn main() {
-    let date = DateTime {
+    let start = DateTime {
         year: 2001,
         month: 12,
         day: 24,
@@ -13,14 +13,14 @@ fn main() {
         second: 0,
     };
 
-    let other = DateTime {
-        year: 2022,
-        month: 11,
-        day: 21,
-        hour: 22,
-        minute: 15,
+    let end = DateTime {
+        year: 2023,
+        month: 2,
+        day: 19,
+        hour: 9,
+        minute: 24,
         second: 0,
     };
 
-    println!("{}", (other.time_since(date, "days") as f32 / 365.25).to_string());
+    println!("{}", (end - start).to_units_string());
 }
