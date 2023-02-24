@@ -1,5 +1,6 @@
 use crate::functions::*;
 
+#[derive(Copy, Clone)]
 pub struct Time {
     pub nanoseconds: isize
 }

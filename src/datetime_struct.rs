@@ -3,6 +3,7 @@ use num::signum;
 
 use crate::functions::*;
 
+#[derive(Copy, Clone)]
 pub struct DateTime {
     pub year: isize,
     pub month: isize,
