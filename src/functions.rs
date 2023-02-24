@@ -94,13 +94,13 @@ pub fn seconds_to_hours(seconds: isize) -> isize {
 pub fn seconds_to_days(seconds: isize) -> isize {
     hours_to_days(seconds_to_hours(seconds))
 }
-pub fn microseconds_to_seconds(microseconds: isize) -> {
+pub fn microseconds_to_seconds(microseconds: isize) -> isize {
     microseconds / 1000
 }
-pub fn nanoseconds_to_microseconds(nanoseconds: isize) -> {
+pub fn nanoseconds_to_microseconds(nanoseconds: isize) -> isize {
     nanoseconds / 1000
 }
-pub fn nanoseconds_to_seconds(nanoseconds: isize) -> {
+pub fn nanoseconds_to_seconds(nanoseconds: isize) -> isize {
     microseconds_to_seconds(nanoseconds_to_microseconds(nanoseconds))
 }
 

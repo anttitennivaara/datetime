@@ -1,17 +1,18 @@
-use crate::functions;
+use crate::functions::*;
 
 pub struct Time {
     nanoseconds: isize
 }
 
 impl Time {
-    pub fn as_unit(&self, unit: &str) -> &isize {
+    pub fn to_unit(&self, unit: &str) -> isize {
         match unit {
-            "hours" => &seconds_to_hours(nanoseconds_to_seconds(self.nanoseconds)),
-            "minutes" => &seconds_to_minutes(nanoseconds_to_seconds(self.nanoseconds)),
-            "seconds" => &nanoseconds_to_seconds(self.nanoseconds),
-            "microseconds" => &seconds_to_hours(nanoseconds_to_seconds(self.nanoseconds)),
-            "nanoseconds" => &self.nanoseconds,
+            "hours" => seconds_to_hours(nanoseconds_to_seconds(self.nanoseconds)),
+            "minutes" => seconds_to_minutes(nanoseconds_to_seconds(self.nanoseconds)),
+            "seconds" => nanoseconds_to_seconds(self.nanoseconds),
+            "microseconds" => seconds_to_hours(nanoseconds_to_seconds(self.nanoseconds)),
+            "nanoseconds" => self.nanoseconds,
+            _ => panic!("Invalid unit"),
         }
     }
 
@@ -22,6 +23,7 @@ impl Time {
             "seconds" => time,
             "minutes" => time,
             "hours" => time,
+            _ => panic!("Invalid unit"),
         }
     }
 }

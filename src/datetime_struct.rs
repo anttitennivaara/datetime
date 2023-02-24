@@ -1,7 +1,7 @@
 use std::ops::Sub;
 use num::signum;
 
-use super::functions::*;
+use crate::functions::*;
 
 pub struct DateTime {
     pub year: isize,
@@ -78,7 +78,7 @@ impl DateTime {
             "minutes" => return seconds_to_minutes(unix_time_diff),
             "hours" => return seconds_to_hours(unix_time_diff),
             "days" => return seconds_to_days(unix_time_diff),
-            _ => panic!("Invalid time unit"),
+            _ => panic!("Invalid unit"),
         }
     }
     
