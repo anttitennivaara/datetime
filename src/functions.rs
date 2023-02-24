@@ -97,11 +97,23 @@ pub fn seconds_to_days(seconds: isize) -> isize {
 pub fn microseconds_to_seconds(microseconds: isize) -> isize {
     microseconds / 1000
 }
+pub fn microseconds_to_minutes(microseconds: isize) -> isize {
+    seconds_to_minutes(microseconds_to_seconds(microseconds))
+}
+pub fn microseconds_to_hours(microseconds: isize) -> isize {
+    seconds_to_hours(microseconds_to_seconds(microseconds))
+}
 pub fn nanoseconds_to_microseconds(nanoseconds: isize) -> isize {
     nanoseconds / 1000
 }
 pub fn nanoseconds_to_seconds(nanoseconds: isize) -> isize {
     microseconds_to_seconds(nanoseconds_to_microseconds(nanoseconds))
+}
+pub fn nanoseconds_to_minutes(nanoseconds: isize) -> isize {
+    seconds_to_minutes(nanoseconds_to_seconds(nanoseconds))
+}
+pub fn nanoseconds_to_hours(nanoseconds: isize) -> isize {
+    seconds_to_hours(nanoseconds_to_seconds(nanoseconds))
 }
 
 pub fn format_string(number: isize) -> String {
