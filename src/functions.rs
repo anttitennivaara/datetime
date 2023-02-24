@@ -18,6 +18,21 @@ pub fn is_leap_year(year: isize) -> bool {
 }
 
 // Conversions to smaller unit:
+pub fn microseconds_to_nanoseconds(microseconds: isize) -> isize {
+    microseconds * 1000
+}
+pub fn seconds_to_microseconds(seconds: isize) -> isize {
+    seconds * 1000
+}
+pub fn seconds_to_nanoseconds(seconds: isize) -> isize {
+    microseconds_to_nanoseconds(seconds_to_microseconds(seconds))
+}
+pub fn minutes_to_microseconds(minutes: isize) -> isize {
+    seconds_to_microseconds(minutes_to_seconds(minutes))
+}
+pub fn minutes_to_nanoseconds(minutes: isize) -> isize {
+    seconds_to_nanoseconds(minutes_to_seconds(minutes))
+}
 pub fn minutes_to_seconds(minutes: isize) -> isize {
     minutes * 60
 }
@@ -26,6 +41,12 @@ pub fn hours_to_minutes(hours: isize) -> isize {
 }
 pub fn hours_to_seconds(hours: isize) -> isize {
     minutes_to_seconds(hours_to_minutes(hours))
+}
+pub fn hours_to_microseconds(hours: isize) -> isize {
+    seconds_to_microseconds(hours_to_seconds(hours))
+}
+pub fn hours_to_nanoseconds(hours: isize) -> isize {
+    seconds_to_nanoseconds(hours_to_seconds(hours))
 }
 pub fn days_to_hours(days: isize) -> isize {
     days * 24
@@ -72,6 +93,15 @@ pub fn seconds_to_hours(seconds: isize) -> isize {
 }
 pub fn seconds_to_days(seconds: isize) -> isize {
     hours_to_days(seconds_to_hours(seconds))
+}
+pub fn microseconds_to_seconds(microseconds: isize) -> {
+    microseconds / 1000
+}
+pub fn nanoseconds_to_microseconds(nanoseconds: isize) -> {
+    nanoseconds / 1000
+}
+pub fn nanoseconds_to_seconds(nanoseconds: isize) -> {
+    microseconds_to_seconds(nanoseconds_to_microseconds(nanoseconds))
 }
 
 pub fn format_string(number: isize) -> String {
