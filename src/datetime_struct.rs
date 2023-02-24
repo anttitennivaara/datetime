@@ -115,6 +115,18 @@ impl DateTime {
         }
     }
     
+    pub fn add_time(&mut self, time: isize, unit: &str) {
+        match unit {
+            "years" => self.add_years(time),
+            "months" => self.add_months(time),
+            "days" => self.add_days(time),
+            "hours" => self.add_hours(time),
+            "minutes" => self.add_minutes(time),
+            "seconds" => self.add_seconds(time),
+            _ => panic!("Invalid unit"),
+        }
+    }
+
     pub fn add_years(&mut self, years: isize) {
         self.year += years;
     }
@@ -179,5 +191,17 @@ impl DateTime {
             self.add_minutes(signum(self.second));
             self.second -= 24 * signum(self.second);
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::datetime_struct::*;
+
+    #[test]
+    fn test_add_time() {
+        let mut test_datetime = DateTime::new();
+        test_datetime.add_time(13, "months");
+        assert_eq!(test_datetime.year, 1971);
     }
 }
