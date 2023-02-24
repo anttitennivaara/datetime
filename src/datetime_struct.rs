@@ -51,7 +51,7 @@ impl DateTime {
             second: 0,
         }
     }
-
+    
     pub fn to_unix_time(&self) -> isize {
         let mut seconds = self.second;
         seconds += minutes_to_seconds(self.minute);
@@ -62,39 +62,26 @@ impl DateTime {
         seconds += days_to_seconds(days);
         seconds
     }
-
+    
     pub fn from_unix_time(seconds: isize) -> DateTime {
         let mut datetime = DateTime::new();
         datetime.add_seconds(seconds);
         datetime
     }
 
-    pub fn time_since(&self, other: DateTime, unit: &str) -> isize {
-        let self_unix = self.to_unix_time();
-        let other_unix = other.to_unix_time();
-        let unix_time_diff = self_unix - other_unix;
-        match unit {
-            "seconds" => return unix_time_diff,
-            "minutes" => return seconds_to_minutes(unix_time_diff),
-            "hours" => return seconds_to_hours(unix_time_diff),
-            "days" => return seconds_to_days(unix_time_diff),
-            _ => panic!("Invalid unit"),
-        }
-    }
-    
     pub fn to_string(&self) -> String {
         let mut date_string = String::from("");
-        date_string.push_str(format_string(self.year).as_str());
+        date_string.push_str(self.year.to_string().as_str());
         date_string.push_str(".");
-        date_string.push_str(format_string(self.month).as_str());
+        date_string.push_str(leading_zero_string(self.month, 2).as_str());
         date_string.push_str(".");
-        date_string.push_str(format_string(self.day).as_str());
+        date_string.push_str(leading_zero_string(self.day, 2).as_str());
         date_string.push_str(" ");
-        date_string.push_str(format_string(self.hour).as_str());
+        date_string.push_str(leading_zero_string(self.hour, 2).as_str());
         date_string.push_str(":");
-        date_string.push_str(format_string(self.minute).as_str());
+        date_string.push_str(leading_zero_string(self.minute, 2).as_str());
         date_string.push_str(":");
-        date_string.push_str(format_string(self.second).as_str());
+        date_string.push_str(leading_zero_string(self.second, 2).as_str());
         date_string
     }
 
@@ -115,6 +102,19 @@ impl DateTime {
         date_string
     }
 
+    pub fn time_since(&self, other: DateTime, unit: &str) -> isize {
+        let self_unix = self.to_unix_time();
+        let other_unix = other.to_unix_time();
+        let unix_time_diff = self_unix - other_unix;
+        match unit {
+            "seconds" => return unix_time_diff,
+            "minutes" => return seconds_to_minutes(unix_time_diff),
+            "hours" => return seconds_to_hours(unix_time_diff),
+            "days" => return seconds_to_days(unix_time_diff),
+            _ => panic!("Invalid unit"),
+        }
+    }
+    
     pub fn add_years(&mut self, years: isize) {
         self.year += years;
     }

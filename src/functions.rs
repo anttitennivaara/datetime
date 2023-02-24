@@ -116,11 +116,11 @@ pub fn nanoseconds_to_hours(nanoseconds: isize) -> isize {
     seconds_to_hours(nanoseconds_to_seconds(nanoseconds))
 }
 
-pub fn format_string(number: isize) -> String {
-    if number < 10 {
-        let mut number_string = String::from("0");
-        number_string.insert_str(1, number.to_string().as_str());
-        return number_string;
+pub fn leading_zero_string(number: isize, digits: usize) -> String {
+    let mut zeros = String::from("");
+    for _ in 0..digits {
+        zeros += "0";
     }
-    number.to_string()
+    let number_string = zeros + number.to_string().as_str();
+    number_string.split_at(number_string.len() - digits).1.to_string()
 }
