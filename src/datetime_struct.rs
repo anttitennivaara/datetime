@@ -177,20 +177,20 @@ impl DateTime {
     }
 
     pub fn add_minutes(&mut self, minutes: isize) {
-        self.minute += minutes % 24;
-        self.add_hours(minutes / 24);
-        if !is_between(0, 23, self.minute) {
+        self.minute += minutes % 60;
+        self.add_hours(minutes / 60);
+        if !is_between(0, 59, self.minute) {
             self.add_hours(signum(self.minute));
-            self.minute -= 24 * signum(self.minute);
+            self.minute -= 60 * signum(self.minute);
         }
     }
 
     pub fn add_seconds(&mut self, seconds: isize) {
-        self.second += seconds % 24;
-        self.add_minutes(seconds / 24);
-        if !is_between(0, 23, self.second) {
+        self.second += seconds % 60;
+        self.add_minutes(seconds / 60);
+        if !is_between(0, 59, self.second) {
             self.add_minutes(signum(self.second));
-            self.second -= 24 * signum(self.second);
+            self.second -= 60 * signum(self.second);
         }
     }
 }
