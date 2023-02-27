@@ -103,7 +103,7 @@ impl DateTime {
         date_string
     }
 
-    pub fn time_since(&self, other: DateTime, unit: &str) -> isize {
+    pub fn time_since(&self, other: &DateTime, unit: &str) -> isize {
         let self_unix = self.to_unix_time();
         let other_unix = other.to_unix_time();
         let unix_time_diff = self_unix - other_unix;
