@@ -1,4 +1,3 @@
-use std::ops::Sub;
 use num::signum;
 
 use crate::functions::*;
@@ -19,27 +18,17 @@ impl Default for DateTime {
     }
 }
 
-// impl Sub for DateTime {
-//     type Output = Self;
+impl PartialEq for DateTime {
+    fn eq(&self, other: &Self) -> bool {
+        self.to_unix_time() == other.to_unix_time()
+    }
+}
 
-//     fn sub(self, other: Self) -> Self::Output {
-//         let mut result = Self {
-//             year: 0,
-//             month: 0,
-//             day: 0,
-//             hour: 0,
-//             minute: 0,
-//             second: 0,
-//         };
-//         result.add_years(self.year - other.year);
-//         result.add_months(self.month - other.month);
-//         result.add_days(self.day - other.day);
-//         result.add_hours(self.hour - other.hour);
-//         result.add_minutes(self.minute - other.minute);
-//         result.add_seconds(self.second - other.second);
-//         result
-//     }
-// }
+impl PartialOrd for DateTime {
+    fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+        self.to_unix_time().partial_cmp(&other.to_unix_time())
+    }
+}
 
 impl DateTime {
     pub fn new() -> Self {
@@ -232,5 +221,21 @@ mod tests {
             second: 0,
         };
         assert_eq!(test_datetime.to_format_string("%Y.%M.%D %h:%m:%s"), test_datetime.to_string());
+    }
+
+    #[test]
+    fn test_equality() {
+        let date1 = DateTime::new();
+        let date2 = DateTime::new();
+        assert!(date1 == date2);
+    }
+
+    #[test]
+    fn test_comparison() {
+        let date1 = DateTime::new();
+        let mut date2 = DateTime::new();
+        date2.add_days(1);
+        assert!(date1 < date2);
+        assert!(date2 > date1);
     }
 }
