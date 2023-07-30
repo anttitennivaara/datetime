@@ -64,8 +64,8 @@ impl DateTime {
         seconds
     }
     
-    pub fn from_unix_time(seconds: isize) -> DateTime {
-        let mut datetime = DateTime::new();
+    pub fn from_unix_time(seconds: isize) -> Self {
+        let mut datetime = Self::new();
         datetime.add_seconds(seconds);
         datetime
     }
@@ -114,7 +114,7 @@ impl DateTime {
         date_string
     }
 
-    pub fn time_since(&self, other: &DateTime, unit: &str) -> isize {
+    pub fn time_since(&self, other: &Self, unit: &str) -> isize {
         let self_unix = self.to_unix_time();
         let other_unix = other.to_unix_time();
         let unix_time_diff = self_unix - other_unix;
@@ -125,6 +125,10 @@ impl DateTime {
             "days" => return seconds_to_days(unix_time_diff),
             _ => panic!("Invalid unit"),
         }
+    }
+
+    pub fn is_between(&self, start: &Self, end: &Self) -> bool {
+        is_between(start.to_unix_time(), end.to_unix_time(), self.to_unix_time())
     }
     
     pub fn add_time(&mut self, time: isize, unit: &str) {
