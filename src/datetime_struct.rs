@@ -19,27 +19,27 @@ impl Default for DateTime {
     }
 }
 
-impl Sub for DateTime {
-    type Output = Self;
+// impl Sub for DateTime {
+//     type Output = Self;
 
-    fn sub(self, other: Self) -> Self::Output {
-        let mut result = Self {
-            year: 0,
-            month: 0,
-            day: 0,
-            hour: 0,
-            minute: 0,
-            second: 0,
-        };
-        result.add_years(self.year - other.year);
-        result.add_months(self.month - other.month);
-        result.add_days(self.day - other.day);
-        result.add_hours(self.hour - other.hour);
-        result.add_minutes(self.minute - other.minute);
-        result.add_seconds(self.second - other.second);
-        result
-    }
-}
+//     fn sub(self, other: Self) -> Self::Output {
+//         let mut result = Self {
+//             year: 0,
+//             month: 0,
+//             day: 0,
+//             hour: 0,
+//             minute: 0,
+//             second: 0,
+//         };
+//         result.add_years(self.year - other.year);
+//         result.add_months(self.month - other.month);
+//         result.add_days(self.day - other.day);
+//         result.add_hours(self.hour - other.hour);
+//         result.add_minutes(self.minute - other.minute);
+//         result.add_seconds(self.second - other.second);
+//         result
+//     }
+// }
 
 impl DateTime {
     pub fn new() -> Self {
