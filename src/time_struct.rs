@@ -1,4 +1,5 @@
 use std::ops::{Add, AddAssign, Sub, SubAssign};
+use std::fmt;
 
 use crate::functions::*;
 
@@ -33,6 +34,23 @@ impl SubAssign for Time {
     }
 }
 
+impl fmt::Display for Time {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let hours = self.to_unit("hours");
+        let minutes = self.to_unit("minutes") - hours_to_minutes(hours);
+        let seconds = self.to_unit("seconds") - minutes_to_seconds(self.to_unit("minutes"));
+        let mut time_string = String::from("");
+        time_string.push_str(leading_zero_string(hours, 2).as_str());
+        time_string.push_str(":");
+        time_string.push_str(leading_zero_string(minutes, 2).as_str());
+        time_string.push_str(":");
+        time_string.push_str(leading_zero_string(seconds, 2).as_str());
+        time_string.push_str(".");
+        time_string.push_str(leading_zero_string(self.nanoseconds, 6).as_str());
+        write!(f, "{}", time_string)
+    }
+}
+
 impl Time {
     pub fn to_unit(&self, unit: &str) -> isize {
         match unit {
@@ -45,20 +63,20 @@ impl Time {
         }
     }
 
-    pub fn to_string(&self) -> String {
-        let hours = self.to_unit("hours");
-        let minutes = self.to_unit("minutes") - hours_to_minutes(hours);
-        let seconds = self.to_unit("seconds") - minutes_to_seconds(self.to_unit("minutes"));
-        let mut time_string = String::from("");
-        time_string.push_str(leading_zero_string(hours, 2).as_str());
-        time_string.push_str(":");
-        time_string.push_str(leading_zero_string(minutes, 2).as_str());
-        time_string.push_str(":");
-        time_string.push_str(leading_zero_string(seconds, 2).as_str());
-        time_string.push_str(".");
-        time_string.push_str(leading_zero_string(self.nanoseconds, 6).as_str());
-        time_string
-    }
+    // pub fn to_string(&self) -> String {
+    //     let hours = self.to_unit("hours");
+    //     let minutes = self.to_unit("minutes") - hours_to_minutes(hours);
+    //     let seconds = self.to_unit("seconds") - minutes_to_seconds(self.to_unit("minutes"));
+    //     let mut time_string = String::from("");
+    //     time_string.push_str(leading_zero_string(hours, 2).as_str());
+    //     time_string.push_str(":");
+    //     time_string.push_str(leading_zero_string(minutes, 2).as_str());
+    //     time_string.push_str(":");
+    //     time_string.push_str(leading_zero_string(seconds, 2).as_str());
+    //     time_string.push_str(".");
+    //     time_string.push_str(leading_zero_string(self.nanoseconds, 6).as_str());
+    //     time_string
+    // }
 
     pub fn add_time(&mut self, time: isize, unit: &str) {
         self.nanoseconds += match unit {
