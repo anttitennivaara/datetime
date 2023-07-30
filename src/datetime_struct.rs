@@ -70,6 +70,17 @@ impl DateTime {
         datetime
     }
 
+    pub fn to_format_string(&self, format: &str) -> String {
+        let mut date_string = String::from(format);
+        date_string = date_string.replace("%Y", self.year.to_string().as_str());
+        date_string = date_string.replace("%M", leading_zero_string(self.month, 2).as_str());
+        date_string = date_string.replace("%D", leading_zero_string(self.day, 2).as_str());
+        date_string = date_string.replace("%h", leading_zero_string(self.hour, 2).as_str());
+        date_string = date_string.replace("%m", leading_zero_string(self.minute, 2).as_str());
+        date_string = date_string.replace("%s", leading_zero_string(self.second, 2).as_str());
+        date_string
+    }
+
     pub fn to_string(&self) -> String {
         let mut date_string = String::from("");
         date_string.push_str(self.year.to_string().as_str());
@@ -204,5 +215,18 @@ mod tests {
         let mut test_datetime = DateTime::new();
         test_datetime.add_time(13, "months");
         assert_eq!(test_datetime.year, 1971);
+    }
+
+    #[test]
+    fn test_format_date() {
+        let test_datetime = DateTime{
+            year: 2001,
+            month: 12,
+            day: 24,
+            hour: 0,
+            minute: 0,
+            second: 0,
+        };
+        assert_eq!(test_datetime.to_format_string("%Y.%M.%D %h:%m:%s"), test_datetime.to_string());
     }
 }
