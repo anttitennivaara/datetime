@@ -1,8 +1,36 @@
+use std::ops::{Add, AddAssign, Sub, SubAssign};
+
 use crate::functions::*;
 
 #[derive(Copy, Clone)]
 pub struct Time {
     pub nanoseconds: isize
+}
+
+impl Add for Time {
+    type Output = Self;
+    fn add(self, other: Self) -> Self {
+        build_time(self.nanoseconds + other.nanoseconds, "nanoseconds")
+    }
+}
+
+impl AddAssign for Time {
+    fn add_assign(&mut self, other: Self) {
+        self.nanoseconds += other.nanoseconds;
+    }
+}
+
+impl Sub for Time {
+    type Output = Self;
+    fn sub(self, other: Self) -> Self {
+        build_time(self.nanoseconds - other.nanoseconds, "nanoseconds")
+    }
+}
+
+impl SubAssign for Time {
+    fn sub_assign(&mut self, other: Self) {
+        self.nanoseconds -= other.nanoseconds;
+    }
 }
 
 impl Time {
